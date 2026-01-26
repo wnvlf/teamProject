@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,12 +11,21 @@ public class Player : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+
+#if UNITY_EDITOR
+        Array.Clear(player.itemSo1, 0, 5);
+#endif
+
+        DescManager.instance.UpdateInfo(player);
     }
 
     public void PushPlayerDice(ItemSo Dice)

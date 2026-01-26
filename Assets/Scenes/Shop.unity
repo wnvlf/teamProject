@@ -331,8 +331,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: ChangeScreenMode
         m_Mode: 0
         m_Arguments:
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 158216085}
   m_Layer: 5
   m_Name: MySlot (1)
-  m_TagString: Untagged
+  m_TagString: MySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,8 +690,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: CloseUI
         m_Mode: 1
         m_Arguments:
@@ -1190,8 +1190,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: ChangeResolution
         m_Mode: 0
         m_Arguments:
@@ -1687,8 +1687,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: FsfxButton
         m_Mode: 1
         m_Arguments:
@@ -1746,7 +1746,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 396462281}
-  - component: {fileID: 396462280}
+  - component: {fileID: 396462282}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1754,20 +1754,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &396462280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 396462279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee2858a74e25504ba91fa2268bd7091, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
-  myDice: {fileID: 0}
-  Gold: 15
 --- !u!4 &396462281
 Transform:
   m_ObjectHideFlags: 0
@@ -1783,6 +1769,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &396462282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396462279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dee2858a74e25504ba91fa2268bd7091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+  player: {fileID: 11400000, guid: 8a24a149812fe8e4ebac57431cd58922, type: 2}
 --- !u!1 &400583767
 GameObject:
   m_ObjectHideFlags: 0
@@ -2024,7 +2023,7 @@ GameObject:
   - component: {fileID: 461141162}
   - component: {fileID: 461141164}
   m_Layer: 0
-  m_Name: RerollManager
+  m_Name: ShopManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2088,7 +2087,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DescManager
   Gold: 15
-  textMesh: {fileID: 1690221382}
+  textGold: {fileID: 1690221382}
+  roundScore: {fileID: 673820080}
+  currentRound: {fileID: 756947799}
   descOn: 0
 --- !u!1 &494344052
 GameObject:
@@ -2230,7 +2231,7 @@ GameObject:
   - component: {fileID: 515845062}
   m_Layer: 5
   m_Name: MySlot (2)
-  m_TagString: Untagged
+  m_TagString: MySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2588,8 +2589,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: FBgmButton
         m_Mode: 1
         m_Arguments:
@@ -2647,44 +2648,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 655435760}
-  - component: {fileID: 655435759}
+  - component: {fileID: 655435761}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: MainOption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &655435759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 655435758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e7dda3ec5d06a04192905b5ea7a2b08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UiController
-  UIWindow: {fileID: 944402631}
-  bgmVolumeImage: {fileID: 0}
-  bgmVolumeMuteImage: {fileID: 0}
-  sfxVolumeImage: {fileID: 0}
-  sfxVolumeMuteImage: {fileID: 0}
-  roundInfoText: {fileID: 0}
-  lifeText: {fileID: 0}
-  targetScoreInfoText: {fileID: 0}
-  myScoreInfoText: {fileID: 0}
-  resultPanel: {fileID: 0}
-  resultTitleText: {fileID: 0}
-  resultTargetScoreText: {fileID: 0}
-  resultMyScoreText: {fileID: 0}
-  resultLifeText: {fileID: 0}
-  gameOverPanel: {fileID: 0}
-  goRoundText: {fileID: 0}
-  goBestScoreText: {fileID: 0}
-  lastDice: []
 --- !u!4 &655435760
 Transform:
   m_ObjectHideFlags: 0
@@ -2700,6 +2671,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &655435761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655435758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444720461081ca04c8ed8f75c41f6dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainOption
+  UIWindow: {fileID: 944402631}
+  bgmVolumeImage: {fileID: 0}
+  bgmVolumeMuteImage: {fileID: 0}
+  sfxVolumeImage: {fileID: 0}
+  sfxVolumeMuteImage: {fileID: 0}
 --- !u!1 &673820078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2759,8 +2747,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Round Score: 1234'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
+  m_sharedMaterial: {fileID: 6550370363465644992, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3183,8 +3171,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Current Round : 5'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
+  m_sharedMaterial: {fileID: 6550370363465644992, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3352,8 +3340,8 @@ GameObject:
   - component: {fileID: 819502426}
   - component: {fileID: 819502425}
   m_Layer: 5
-  m_Name: MySlot (8)
-  m_TagString: Untagged
+  m_Name: BuySlot
+  m_TagString: BuySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3515,8 +3503,8 @@ GameObject:
   - component: {fileID: 859169230}
   - component: {fileID: 859169229}
   m_Layer: 5
-  m_Name: MySlot (7)
-  m_TagString: Untagged
+  m_Name: BuySlot
+  m_TagString: BuySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4742,7 +4730,7 @@ GameObject:
   - component: {fileID: 1402687454}
   m_Layer: 5
   m_Name: MySlot (4)
-  m_TagString: Untagged
+  m_TagString: MySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4830,7 +4818,7 @@ GameObject:
   - component: {fileID: 1426606531}
   m_Layer: 5
   m_Name: MySlot (5)
-  m_TagString: Untagged
+  m_TagString: MySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4995,8 +4983,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: SetSfxVolume
         m_Mode: 0
         m_Arguments:
@@ -5758,8 +5746,8 @@ GameObject:
   - component: {fileID: 1544964292}
   - component: {fileID: 1544964291}
   m_Layer: 5
-  m_Name: MySlot (9)
-  m_TagString: Untagged
+  m_Name: BuySlot
+  m_TagString: BuySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6132,8 +6120,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Gold: 15'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
+  m_sharedMaterial: {fileID: 6550370363465644992, guid: 8fdb559ab510a5b44ad3af81b562ade0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6438,8 +6426,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: SetBgmVolume
         m_Mode: 0
         m_Arguments:
@@ -6463,8 +6451,8 @@ GameObject:
   - component: {fileID: 1755281606}
   - component: {fileID: 1755281605}
   m_Layer: 5
-  m_Name: MySlot (6)
-  m_TagString: Untagged
+  m_Name: BuySlot
+  m_TagString: BuySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6552,7 +6540,7 @@ GameObject:
   - component: {fileID: 1782846821}
   m_Layer: 5
   m_Name: MySlot (3)
-  m_TagString: Untagged
+  m_TagString: MySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6794,9 +6782,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 819502424}
   - {fileID: 1755281604}
   - {fileID: 859169228}
-  - {fileID: 819502424}
   - {fileID: 1544964290}
   m_Father: {fileID: 1460574958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6823,7 +6811,7 @@ MonoBehaviour:
     m_Top: 30
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_StartCorner: 0
+  m_StartCorner: 3
   m_StartAxis: 0
   m_CellSize: {x: 150, y: 150}
   m_Spacing: {x: 100, y: 200}
@@ -7130,8 +7118,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 655435759}
-        m_TargetAssemblyTypeName: UiController, Assembly-CSharp
+      - m_Target: {fileID: 655435761}
+        m_TargetAssemblyTypeName: MainOption, Assembly-CSharp
         m_MethodName: OpenUI
         m_Mode: 1
         m_Arguments:
@@ -7738,5 +7726,5 @@ SceneRoots:
   - {fileID: 454133449}
   - {fileID: 1226274748}
   - {fileID: 655435760}
-  - {fileID: 461141163}
   - {fileID: 396462281}
+  - {fileID: 461141163}

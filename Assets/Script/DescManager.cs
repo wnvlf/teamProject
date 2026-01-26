@@ -7,7 +7,11 @@ public class DescManager : MonoBehaviour
 
     [Header("°ñµå")]
     public int Gold;
-    public TextMeshProUGUI textMesh;
+    public TextMeshProUGUI textGold;
+
+    [Header("¶ó¿îµå")]
+    public TextMeshProUGUI roundScore;
+    public TextMeshProUGUI currentRound;
     
     GameObject selectDesc;
     public bool descOn = false;
@@ -22,6 +26,13 @@ public class DescManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void UpdateInfo(PlayerSo player)
+    {
+        roundScore.text = "ÇöÀç ¶ó¿îµå:" + player.roundScore.ToString();
+        currentRound.text = "¶ó¿îµå Á¡¼ö: " + player.currentRound.ToString();
+        textGold.text = "°ñµå: " + player.gold.ToString();
     }
 
     public void SelectDesc(GameObject selectDesc)
@@ -43,12 +54,12 @@ public class DescManager : MonoBehaviour
     public void BuyGold(int gold)
     {
         Gold -= gold;
-        textMesh.text = Gold.ToString();
+        textGold.text = "°ñµå: " + Gold.ToString();
     }
 
     public void SellGold(int gold)
     {
         Gold += gold;
-        textMesh.text = Gold.ToString();
+        textGold.text = "°ñµå: " + Gold.ToString();
     }
 }

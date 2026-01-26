@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class BuyItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, I
     ItemSo itemInfo;
     Image img;
     Image childImage;
+    TextMeshProUGUI Desc;
     Transform canvas;
     Transform previousParent;
     RectTransform rect;
@@ -22,12 +24,19 @@ public class BuyItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, I
         canvas = FindObjectOfType<Canvas>().transform;
         rect = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        Desc = childImage.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    void Start()
+    {
+        Desc.text = itemInfo.itemDesc;
     }
 
     public void UpdateInfo(ItemSo item)
     {
         itemInfo = item;
         img.sprite = item.itemIcon;
+        Desc.text = itemInfo.itemDesc;
     }
 
     public void OnPointerEnter()
