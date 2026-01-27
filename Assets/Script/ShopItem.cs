@@ -19,7 +19,7 @@ public class ShopItem : MonoBehaviour
 
 
     int randomIndex = -1;
-    List<int> usedIndex = new List<int>();
+    public List<int> usedIndex = new List<int>();
 
     void Start()
     {
@@ -67,15 +67,24 @@ public class ShopItem : MonoBehaviour
 
 
             randomIndex = RandomItem();
-            if (!usedIndex.Contains(randomIndex))
+            if(usedIndex.Count < itemDB.Length)
+            {
+                if (!usedIndex.Contains(randomIndex))
+                {
+                    buyDice[i].UpdateInfo(itemDB[randomIndex]);
+                    usedIndex.Add(randomIndex);
+                }
+                else
+                {
+                    i--;
+                }
+            }
+            else if(usedIndex.Count >= itemDB.Length)
             {
                 buyDice[i].UpdateInfo(itemDB[randomIndex]);
-                usedIndex.Add(randomIndex);
             }
-            else
-            {
-                i--;
-            }
+
+            
 
         }
         usedIndex.Clear();
