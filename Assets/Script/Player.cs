@@ -25,7 +25,9 @@ public class Player : MonoBehaviour
         Array.Clear(player.itemSo1, 0, 5);
 #endif
 
-        DescManager.instance.UpdateInfo(player);
+
+        if(DescManager.instance != null)
+            DescManager.instance.UpdateInfo(player);
     }
 
     public void PushPlayerDice(ItemSo Dice)
