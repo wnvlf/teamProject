@@ -27,6 +27,7 @@ public class DiceManager : MonoBehaviour
     public float delayNextDice = 1.5f;
 
     private bool _isRolling = false;
+    public bool isRolling => _isRolling;
     private int[] _resultStore = new int[6];
 
     void Start()
@@ -141,7 +142,7 @@ public class DiceManager : MonoBehaviour
 
         if(GameManager.instance != null)
         {
-            GameManager.instance.ProcessRoundResult(finalScore, diceAbilities, rollResults);
+            GameManager.instance.ProcessRollResult(finalScore, diceAbilities, rollResults);
         }
 
         _isRolling = false;

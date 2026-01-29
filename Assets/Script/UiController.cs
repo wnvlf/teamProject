@@ -48,14 +48,6 @@ public class UiController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        if(rollBtn != null)
-        {
-            rollBtn.onClick.AddListener(GameManager.instance.OnClickRollBtn);
-        }
-    }
-
     public void UpdateInGameInfo(int round, int lives, int currentScore, int targetScore)
     {
         if(roundInfoText)

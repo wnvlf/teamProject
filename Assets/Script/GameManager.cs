@@ -1,7 +1,8 @@
-using UnityEngine;
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
+using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,11 +18,13 @@ public class GameManager : MonoBehaviour
     private int _currentRerollCount;
     private bool _isFirstRoll = true;
 
-
     public int currentScore = 0;
     public int bestScore = 0;
 
     public DiceManager diceManager;
+
+    private List<DiceAbility> _lastDiceAbility;
+    private List<int> _lastValue;
 
     private void Awake()
     {
@@ -37,7 +40,6 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _currentRerollCount = maxRerollCount;
         currentLives = maxLives;
         UpdateGameUi();
         StartRound();
@@ -46,19 +48,25 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void UpdateGameUi()
     {
-        UiController.instance.UpdateInGameInfo(currentRound, currentLives, currentScore, targetScore);
+        if(UiController.instance != null)
+        {
+            UiController.instance.UpdateInGameInfo(currentRound, currentLives, currentScore, targetScore);
+        }
     }
 
     public void StartRound()
     {
         _isFirstRoll = true;
         _currentRerollCount = maxRerollCount;
-
         currentScore = 0;
+
         UiController.instance.HideAllPanels();
         UpdateGameUi();
 
-        if(diceManager != null)
+        UiController.instance.UpdateRerollInfo(_currentRerollCount, _isFirstRoll);
+        UiController.instance.SetRollBtnInteractable(true);
+
+        if (diceManager != null)
         {
             diceManager.ResetForNewRound();
         }
@@ -68,6 +76,8 @@ public class GameManager : MonoBehaviour
     public void OnClickRollBtn()
     {
 
+        if (UiController.instance.rollBtn.interactable == false) return;
+
         UiController.instance.rollBtn.interactable = false;
 
         if (_isFirstRoll)
@@ -76,10 +86,11 @@ public class GameManager : MonoBehaviour
             diceManager.StartRolling();
             Debug.Log("첫번째 굴리기");
         }
-        else if(_currentRerollCount > 0)
+        else if(!_isFirstRoll && _currentRerollCount > 0)
         {
             _currentRerollCount--;
             diceManager.StartRolling();
+            Debug.Log("다시 굴리기");
         }
 
         UiController.instance.UpdateRerollInfo(_currentRerollCount, _isFirstRoll);
@@ -89,17 +100,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ProcessRoundResult(int finalScore, List<DiceAbility> abilities, List<int> values)
+    public void OnClickScoreConfirm()
+    {
+        if (UiController.instance.rollBtn.interactable == false && diceManager.isRolling) return;
+        Debug.Log("점수 확정 버튼 클릭");
+        CompleteRound();    
+    }
+
+    public void ProcessRollResult(int finalScore, List<DiceAbility> abilities, List<int> values)
     {
         currentScore = finalScore;
-        bool isSuccess = currentScore >= targetScore;
+        _lastDiceAbility = abilities;
+        _lastValue = values;
 
+        // 최고 점수 갱신
         if(currentScore > bestScore)
         {
             bestScore = currentScore;
         }
 
         UpdateGameUi();
+
+        if (_currentRerollCount <= 0)
+        {
+            Debug.Log("리롤 횟수 소진, 자동 점수 확정 결과 패널 등장");
+            CompleteRound();
+        }
+        else
+        {
+            UiController.instance.SetRollBtnInteractable(true);
+        }
+    }
+
+    public void CompleteRound()
+    {
+        UiController.instance.SetRollBtnInteractable(false);
+
+        bool isSuccess = currentScore >= targetScore;
 
         if (isSuccess)
         {
@@ -117,11 +154,14 @@ public class GameManager : MonoBehaviour
             {
                 // 게임 오버시 모든 눈금을 1로 채워서 보여주기 위해 사용
                 List<int> fakeValue = new List<int>();
-                for (int i = 0; i < values.Count; i++)
+                if(_lastValue != null)
                 {
-                    fakeValue.Add(1);
+                    for(int i = 0; i < _lastValue.Count; i++)
+                    {
+                        fakeValue.Add(1);
+                    }
                 }
-                UiController.instance.ShowGameOverPanel(currentRound, bestScore, abilities, fakeValue);
+                UiController.instance.ShowGameOverPanel(currentRound, bestScore, _lastDiceAbility, fakeValue);
             }
         }
     }
