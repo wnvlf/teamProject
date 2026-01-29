@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     {
 
 #if UNITY_EDITOR
-        Array.Clear(player.itemSo1, 0, 5);
+        Array.Clear(player.itemSo1, 0, player.itemSo1.Length);
 #endif
 
 
@@ -57,5 +57,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void ResetDices(ItemSo[] Dices)
+    {
+        for(int i = 0;i < Dices.Length; i++)
+        {
+            player.itemSo1[i] = Dices[i];
+        }
+    }
 
 }

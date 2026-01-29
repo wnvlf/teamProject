@@ -1,11 +1,11 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class HomeScreenUI : MonoBehaviour
 {
     public static HomeScreenUI instance;
+    public ItemSo[] Dices;
     [Header("text")]
     public TextMeshProUGUI bestRoundtext;
     public TextMeshProUGUI bestScoretext;
@@ -41,6 +41,7 @@ public class HomeScreenUI : MonoBehaviour
             {
                 synergyGold += item.Gold;
                 synergyGoldText.text = "ÇÊ¿ä °ñµå: " + synergyGold.ToString();
+                Dices[i] = item;
                 synergy.transform.GetChild(i).GetComponent<SynergyDIce>().Dice = item;
                 synergy.transform.GetChild(i).GetComponent<Image>().sprite = item.itemIcon;
                 synergy.transform.GetChild(i).gameObject.SetActive(true);
@@ -49,9 +50,21 @@ public class HomeScreenUI : MonoBehaviour
         }
     }
 
-    public void PopSynergyImage()
+    public void PopSynergyImage(ItemSo item)
     {
-        synergyGoldText.text = "ÇÊ¿ä °ñµå: " + synergyGold.ToString();
+        for (int i = 0; i < synergy.transform.childCount; i++)
+        {
+            if (Dices[i] == item)
+            {
+                synergyGold -= item.Gold;
+                synergyGoldText.text = "ÇÊ¿ä °ñµå: " + synergyGold.ToString();
+                Dices[i] = null;
+                synergy.transform.GetChild(i).GetComponent<SynergyDIce>().Dice = item;
+                synergy.transform.GetChild(i).GetComponent<Image>().sprite = item.itemIcon;
+                synergy.transform.GetChild(i).gameObject.SetActive(false);
+                return;
+            }
+        }
     }
 
     public void SynergyButtonImageUpdate()
@@ -59,18 +72,22 @@ public class HomeScreenUI : MonoBehaviour
         for(int i = 0; i < synergyButton.transform.childCount; i++)
         {
             Transform synergyChild = synergyButton.transform.GetChild(i);
-            if (Player.instance.player.itemSo1[i] == null)
+            if(Dices[i] != null)
             {
-                synergyChild.gameObject.SetActive(false);
+                synergyChild.GetComponent<Image>().sprite = Dices[i].itemIcon;
+                if (!synergyChild.gameObject.activeSelf)
+                    synergyChild.gameObject.SetActive(true);
             }
             else
             {
-                synergyChild.GetComponent<Image>().sprite =
-                    Player.instance.player.itemSo1[i].itemIcon;
-                if (!synergyChild.gameObject.activeSelf)
-                    synergyChild.gameObject.SetActive(true);
-            }      
+                synergyChild.gameObject.SetActive(false);
+            }
         }
+    }
+
+    public void ResetPlayerDices()
+    {
+        Player.instance.ResetDices(Dices);
     }
     
 
