@@ -4,14 +4,17 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using JetBrains.Annotations;
+using System.Security.Cryptography;
+using System.Drawing;
 
 public class DiceManager : MonoBehaviour
 {
+
     [Header("UI 연결")]
-    public GameObject rollPanel;
-    public CanvasGroup panelCanvasGroup;
+    //public GameObject rollPanel;
+    //public CanvasGroup panelCanvasGroup;
+    public RectTransform rollArea;
 
     [Header("주사위 오브젝트")]
     public Dice[] panelDiceScript;
@@ -24,39 +27,29 @@ public class DiceManager : MonoBehaviour
     [Header("기본 설정")]
     public DiceAbility defaultDiceAbilit;
     public DiceSkin defaultDiceSkin;
-    public float delayNextDice = 1.5f;
+    //public float delayNextDice = 1.5f;
+    public bool isRolling => _isRolling;
 
     private bool _isRolling = false;
-    public bool isRolling => _isRolling;
     private int[] _resultStore = new int[6];
+    // 원래 자리 기억용
+    private Vector3[] _originalPosition;
+    private float padding = 100.0f;
 
     void Start()
     {
+        if(GameManager.instance != null)
+        {
+            GameManager.instance.diceManager = this;
+        }
+
         SetupDiceAbilities();
-        if (rollPanel != null)
-        {
-            rollPanel.SetActive(false);
-        }
 
-        if (panelCanvasGroup != null)
+        _originalPosition = new Vector3[panelDiceScript.Length];
+        for(int i = 0; i < panelDiceScript.Length; i++)
         {
-            panelCanvasGroup.alpha = 0;
-        }
-
-        foreach (var img in boardResultImage)
-        {
-            if(img != null)
-            {
-                img.gameObject.SetActive(false);
-            }
-        }
-
-        foreach (var dice in panelDiceScript) 
-        {
-            if(dice != null)
-            {
-                dice.gameObject.SetActive(false);
-            }
+            _originalPosition[i] = panelDiceScript[i].transform.position;
+            panelDiceScript[i].SetAbility(panelDiceScript[i].MyAbility);
         }
     }
 
@@ -79,13 +72,9 @@ public class DiceManager : MonoBehaviour
 
     public void StartRolling()
     {
-        if(_isRolling)
-        {
-            return;
-        }
+        if (_isRolling) return;
         StartCoroutine(RollRoutine());
     }
-
 
     IEnumerator RollRoutine()
     {
@@ -93,47 +82,73 @@ public class DiceManager : MonoBehaviour
 
         UiController.instance.SetRollBtnInteractable(false);
 
-        if (rollPanel != null)
-        {
-            rollPanel.SetActive(true);
+        float rollDuration = 1.5f;
 
-            foreach (var dice in panelDiceScript)
-            {
-                dice.gameObject.SetActive(false);
-            }
-
-            if (panelCanvasGroup != null)
-            {
-                panelCanvasGroup.alpha = 0;
-                panelCanvasGroup.DOFade(1f, 0.5f);
-            }
-        }
-
-        yield return new WaitForSeconds(0.5f);
+        DG.Tweening.Sequence rollSequence = DOTween.Sequence();
 
         for(int i = 0; i < panelDiceScript.Length; i++)
         {
-            int randomDiceResult = Random.Range(1, 7);
-            _resultStore[i] = randomDiceResult;
+            if (panelDiceScript[i] == null) continue;
 
-            GameObject diceObj = panelDiceScript[i].gameObject;
-            diceObj.SetActive(true);
+            Dice currentDice = panelDiceScript[i];
+            Transform diceTransform = currentDice.transform;
 
-            diceObj.transform.localScale = Vector3.zero;
+            float currentDuration = rollDuration + Random.Range(-0.2f, 0.2f);
 
-            StartCoroutine(panelDiceScript[i].RollDice(randomDiceResult, 0.7f));
+            currentDice.StartRoll(rollDuration * 0.9f);
 
-            yield return new WaitForSeconds(delayNextDice);
+            // 눈금 값 결정
+            int randomResult = Random.Range(1, 7);
+            _resultStore[i] = randomResult;
+
+            int boundCount = Random.Range(2, 5);
+
+            float stopTime = currentDuration * 0.3f;
+            float boundTime = (currentDuration - stopTime) / boundCount;
+            
+            Vector3 StopPoint = GetRandomPointInRollArea();
+
+            // 이동
+            DG.Tweening.Sequence moveSeq = DOTween.Sequence();
+
+            for(int j = 0; j < boundCount; j++)
+            {
+                Vector3 randomPoint = GetRandomPointInRollArea();
+                moveSeq.Append(diceTransform.DOMove(randomPoint, boundTime).SetEase(Ease.InOutQuad));
+            }
+
+            moveSeq.Append(diceTransform.DOMove(StopPoint, stopTime).SetEase(Ease.OutCubic).OnComplete(()=>
+            {
+                currentDice.SetResult(randomResult);
+            }));
+
+            // 주사위 회전
+            Tween roateTween = diceTransform
+                .DORotate(new Vector3(0, 0, 365 * 5), rollDuration, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutCubic);
+
+            rollSequence.Join(moveSeq);
+            rollSequence.Join(roateTween);
         }
 
-        yield return new WaitForSeconds(1.5f);
-        
-        if(rollPanel != null) 
+        yield return rollSequence.WaitForCompletion();
+
+        yield return new WaitForSeconds(1.0f);
+
+        // 주사위가 다시 제자리로
+        DG.Tweening.Sequence returnSequence = DOTween.Sequence();
+
+        for(int i = 0; i < panelDiceScript.Length; i++)
         {
-            rollPanel.SetActive(false);
+            if (panelDiceScript[i] == null) continue;
+            Transform diceTransform = panelDiceScript[i].transform;
+
+            returnSequence.Join(diceTransform.DOMove(_originalPosition[i], 0.5f));
+            returnSequence.Join(diceTransform.DORotate(Vector3.zero, 0.5f));
         }
 
-        ApplyResultToBoard();
+        yield return returnSequence.WaitForCompletion();
+
 
         // 점수 계산
         List<int> rollResults = new List<int>(_resultStore);
@@ -147,7 +162,6 @@ public class DiceManager : MonoBehaviour
 
         _isRolling = false;
     }
-
     public Sprite[] GetLastDiceSprites()
     {
         Sprite[] lastDiceSprite = new Sprite[panelDiceScript.Length];
@@ -159,17 +173,26 @@ public class DiceManager : MonoBehaviour
         return lastDiceSprite;
     }
 
-    void ApplyResultToBoard()
-    {
-        for(int i = 0; i < panelDiceScript.Length; i++)
-        {
-            boardResultImage[i].gameObject.SetActive(true);
-            boardResultImage[i].sprite = panelDiceScript[i].GetCurrentSprite();
-        }
-    }
-
     public void ResetForNewRound()
     {
         _isRolling = false;
+    }
+
+    // 화면 랜덤 좌표 
+    Vector3 GetRandomPointInRollArea()
+    {
+        if(rollArea == null)
+        {
+            return transform.position;
+        }
+
+        Rect rect = rollArea.rect;
+
+        float safePadX = Mathf.Min(padding, rect.width * 0.3f);
+        float safePadY = Mathf.Min(padding, rect.height * 0.3f);
+
+        float localX = Random.Range(rect.xMin + safePadX, rect.xMax - safePadX);
+        float localY = Random.Range(rect.yMin + safePadY, rect.yMax - safePadY);
+        return rollArea.TransformPoint(localX, localY, 0);
     }
 }

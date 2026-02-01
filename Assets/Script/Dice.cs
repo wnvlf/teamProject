@@ -11,12 +11,14 @@ public class Dice : MonoBehaviour
     public GameObject effectPrefab;
     public AudioClip rollSound;
 
-    private DiceAbility _myAbility;
     private DiceSkin _defaultSkin;
-
+    public DiceAbility MyAbility { get; private set; }
+    
+    // 현재 눈금 저장
+    public int CurrentValue { get; private set; }
     public void SetAbility(DiceAbility ability)
     {
-        this._myAbility = ability;
+        this.MyAbility = ability;
         // 다이스 기본 세팅
         UpdateDiceImage(1);
     }
@@ -28,9 +30,9 @@ public class Dice : MonoBehaviour
 
     public void UpdateDiceImage(int value)
     {
-        if(_myAbility != null && _myAbility.skin != null)
+        if(MyAbility != null && MyAbility.skin != null)
         {
-            diceImage.sprite = _myAbility.skin.GetSprite(value);
+            diceImage.sprite = MyAbility.skin.GetSprite(value);
         }
         else if(_defaultSkin != null)
         {
@@ -38,45 +40,35 @@ public class Dice : MonoBehaviour
         }
     }
 
-    public IEnumerator RollDice(int resultIndex, float duration)
+    public void StartRoll(float duration)
     {
-        // 사운드
-        if (SoundManager.instance != null)
-        {
-            SoundManager.instance.PlaySfx(rollSound);
-        }
+        StartCoroutine(ChangeImageDuringRoll(duration));
+    }
 
-        // 주사위 흔들기
-        transform.DOScale(Vector3.one * 1.3f, 0.2f).SetEase(Ease.OutBack);
-        transform.DOShakeRotation(duration, new Vector3(0, 0, 90), 20);
-        // 이미지 교체
+    IEnumerator ChangeImageDuringRoll(float duration)
+    {
         float timer = 0f;
-        float switchInterval = 0.05f;
+        float switchinterval = 0.1f;
 
-        while (timer < duration)
+        while(timer < duration)
         {
-            if(_myAbility != null && _myAbility.skin != null)
-            {
-                diceImage.sprite = _myAbility.skin.GetSprite(Random.Range(1, 7));
-            }
-            else if(_defaultSkin != null)
-            {
-                diceImage.sprite = _defaultSkin.GetSprite(Random.Range(1, 7));
-            }
+            int randomValue = Random.Range(1, 7);
+            UpdateDiceImage(randomValue);
 
-            yield return new WaitForSeconds(switchInterval);
-            timer += switchInterval;
+            yield return new WaitForSeconds(switchinterval);
+            timer += switchinterval;
         }
-
-        // 결과 확정
-        UpdateDiceImage(resultIndex);
-        // 사운드 & 회전 복구
-        transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBounce);
-        transform.rotation = Quaternion.identity;
-        // 이펙트
-
     }
     
+    public void SetResult(int resultValue)
+    {
+        StopAllCoroutines();
+
+        CurrentValue = resultValue;
+
+        UpdateDiceImage(resultValue);
+    }
+
     public Sprite GetCurrentSprite()
     {
         return diceImage.sprite;
