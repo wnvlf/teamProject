@@ -60,7 +60,7 @@ public class BuyDice : BuyThings, IPointerClickHandler, IEndDragHandler
         }
         else
         {
-            if (transform.parent == canvas || transform.parent.CompareTag("BuySlot"))
+            if (transform.parent == canvas || !transform.parent.CompareTag("MySlot"))
             {
                 transform.SetParent(previousParent);
                 rect.position = previousParent.GetComponent<RectTransform>().position;
