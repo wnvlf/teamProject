@@ -45,7 +45,7 @@ public class BuyItem : BuyThings, IPointerClickHandler, IEndDragHandler
     {
         if (!bought)
         {
-            if (transform.parent.CompareTag("BuySlot") || transform.parent == canvas ||
+            if (!transform.parent.CompareTag("Inventory") || transform.parent == canvas ||
                 Player.instance.player.gold - itemInfo.gold < 0)
             {
                 transform.SetParent(previousParent);

@@ -8,15 +8,13 @@ public class ShopItem : MonoBehaviour
 
     int totalDice = 0;
     int totalItem = 0;
-    
+    BuyDice[] buyDice;
+    BuyItem[] buyItem;
+
     [Header("데이터 베이스")]
     public ItemSo[] itemDB;
     public DiceData[] DiceDB;
     
-    [Header("구매 목록")]
-    BuyDice[] buyDice;
-    BuyItem[] buyItem;
-
     [Header("구매 아이템 슬롯")]
     public ItemSlot[] itemSlots;
     public int DiceSlotNum;

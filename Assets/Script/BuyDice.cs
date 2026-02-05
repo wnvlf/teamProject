@@ -45,7 +45,7 @@ public class BuyDice : BuyThings, IPointerClickHandler, IEndDragHandler
     {
         if (!bought)
         {
-            if (transform.parent.CompareTag("BuySlot") || transform.parent == canvas ||
+            if (!transform.parent.CompareTag("MySlot") || transform.parent == canvas ||
                 Player.instance.player.gold - DiceInfo.gold < 0)
             {
                 transform.SetParent(previousParent);
