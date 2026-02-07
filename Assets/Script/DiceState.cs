@@ -6,7 +6,6 @@ public class DiceState
 {
     public DiceData diceData;
 
-    public bool isEven;        // 짝수
     public int diceIndex;      // 주사위 순서
     public int originalValue; // 최초 주사위 값
     public int modifiedValue; // 효과 적용 후 주사위 값
@@ -16,7 +15,7 @@ public class DiceState
     public bool isForceOdd = false;
 
     public bool IsCurrentEven => !isForceOdd && (modifiedValue % 2 == 0);
-    public DiceState(DiceData data, int index, int value, bool isEven)
+    public DiceState(DiceData data, int index, int value)
     {
         diceData = data;
         diceIndex = index;

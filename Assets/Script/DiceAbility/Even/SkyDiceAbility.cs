@@ -16,14 +16,13 @@ public class SkyDiceAbility : DiceData
         //    }
         //}
 
-        foreach(var dice in allDice)
+        foreach (var dice in allDice)
         {
-            if(dice != null && dice.IsCurrentEven)
+            if (dice != null && dice.IsCurrentEven)
             {
                 dice.scoreValue *= bonusScore;
                 events.Add(new ScoreEventData(ScoreEventData.Type.Multiplier, dice.diceIndex, 0, "Sky"));
             }
         }
-
     }
 }
