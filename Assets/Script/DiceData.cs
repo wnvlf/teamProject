@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DiceData", menuName = "Scriptable Objects/DiceData")]
 public class DiceData : ScriptableObject
 {
-    public ScoreManager.Type type;
+    public ScoreManager.DiceType type;
 
     public string abilityName;
     public int weight;

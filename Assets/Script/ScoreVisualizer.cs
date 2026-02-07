@@ -22,7 +22,8 @@ public class ScoreVisualizer : MonoBehaviour
 
     public IEnumerator PlayScoreEventSequence(Dice[] uiDice, List<ScoreEventData> scoreEvent)
     {
-        foreach(var evt in scoreEvent)
+        
+        foreach (var evt in scoreEvent)
         {
             Dice targetDice = null;
             if(evt.targetIndex >= 0 && evt.targetIndex < uiDice.Length)
@@ -52,12 +53,25 @@ public class ScoreVisualizer : MonoBehaviour
                     yield return new WaitForSeconds(1.0f);
                     break;
                 case ScoreEventData.Type.GlobalBuffs:
+
+                    Tween lastTween = null;
+
                     foreach(var dice in uiDice)
                     {
                         if (dice == null || !dice.gameObject.activeSelf) continue;
 
-                        PlayDotweenEffect(dice, "Jump");
+                        lastTween = PlayDotweenEffect(dice, "Jump");
+
                         ShowFloatingText(dice.transform.position, evt.desc);
+                    }
+
+                    if(lastTween != null)
+                    {
+                        lastTween.WaitForCompletion();
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(1.0f);
                     }
                     break;
                 case ScoreEventData.Type.ChangeFace:
@@ -115,7 +129,7 @@ public class ScoreVisualizer : MonoBehaviour
         finalScoreText.transform.DOShakePosition(0.3f, 2f);
     }
 
-    public void PlayDotweenEffect(Dice dice, string type)
+    public Tween PlayDotweenEffect(Dice dice, string type)
     {
         Transform t = dice.transform;
 
@@ -123,27 +137,37 @@ public class ScoreVisualizer : MonoBehaviour
         t.localScale = Vector3.one;
         t.localRotation = Quaternion.identity;
 
+        Tween resultTween = null;
+
         switch(type)
         {
             case "Punch":
-                t.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1);
+                resultTween = t.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1);
                 break;
             case "Jump":
-                t.DOLocalJump(t.localPosition, 30f, 1, 0.4f);
-                t.DORotate(new Vector3(0, 0, 360), 0.4f, RotateMode.FastBeyond360);
+
+                DG.Tweening.Sequence jumpSeq = DOTween.Sequence();
+
+                jumpSeq.Append(t.DOLocalJump(t.localPosition, 30f, 1, 1.5f));
+                jumpSeq.Join(t.DORotate(new Vector3(0, 0, 360), 1.5f, RotateMode.FastBeyond360));
+
+                resultTween = jumpSeq;
                 break;
             case "Shake":
-                t.DOShakePosition(0.3f, 5f, 20, 90, false, true);
+                resultTween = t.DOShakePosition(0.35f, 7f, 25, 100, false, true);
                 break;
             case "Flash":
                 Image img = dice.GetComponent<Image>();
                 if(img != null)
                 {
-                    img.DOColor(Color.white, 0.1f).SetLoops(2, LoopType.Yoyo);
+                    resultTween = img.DOColor(Color.white, 0.1f).SetLoops(2, LoopType.Yoyo);
                 }
                 break;
         }
+
+        return resultTween;
     }
+
 
     public void ShowFloatingText(Vector3 wordPos, string text)
     {
