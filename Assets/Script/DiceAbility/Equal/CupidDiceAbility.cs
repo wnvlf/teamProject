@@ -6,22 +6,21 @@ using UnityEngine;
 public class CupidDiceAbility : DiceData
 {
     public int bonusScore = 2;
-    int[] bonus = new int[7];
-    public override void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
+    public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        Array.Clear(bonus, 0, 7);
+        int[] localBonus = new int[7];
 
         foreach (var dice in allDice)
         {
-            bonus[dice.modifiedValue]++;
+            localBonus[dice.modifiedValue]++;
         }
 
         foreach (var dice in allDice)
         {
-            if(bonus[dice.modifiedValue] >= 2)
+            if(localBonus[dice.modifiedValue] >= 2)
             {
                 dice.scoreValue *= bonusScore;
-                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, $"Cupid x{bonusScore}"));
+                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, totalScore, $"Cupid x{bonusScore}"));
             }
         }
     }

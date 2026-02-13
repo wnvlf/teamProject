@@ -7,19 +7,18 @@ public class LandDiceAbility : DiceData
     public int bonusScore = 2;
     
 
-    public override void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
+    public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        bonusScore = bonusScore * multiBonusScore + plusBonusScore;
+        int currentBonusScore = bonusScore * myState.multiBonusScore + myState.plusBonusScore;
 
         foreach (var dice in allDice)
         {
             if(dice != null && !dice.IsCurrentEven)
             {
-                dice.scoreValue *= bonusScore;
-                events.Add(new ScoreEventData(ScoreEventData.Type.Multiplier, dice.diceIndex, 0, $"Land! x{bonusScore}"));
+                int add = dice.scoreValue *= (currentBonusScore - 1);
+                totalScore += add;
+                events.Add(new ScoreEventData(ScoreEventData.Type.Multiplier, dice.diceIndex, totalScore, $"Land! x{bonusScore}"));
             }
         }
-
-        bonusScore = 2;
     }
 }

@@ -4,33 +4,23 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "DiceAbility/bam")]
 public class BamDiceAbility : DiceData
 {
-    int maxValue = 0;
-
     public override void OnRollEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
     {
-        //´«±Ý º¯ÇÔ
-
-        
+        int localMaxValue = 0;       
         foreach (var dice in allDice)
         {
-            if(dice.modifiedValue > maxValue) maxValue = dice.modifiedValue;
+            if(dice.modifiedValue > localMaxValue) localMaxValue = dice.modifiedValue;
         }
 
         foreach(var dice in allDice)
         {
-            dice.modifiedValue = maxValue;
-            dice.scoreValue = maxValue;
+            dice.modifiedValue = localMaxValue;
+            dice.scoreValue = localMaxValue;
             dice.change = true;
-            events.Add(new ScoreEventData(ScoreEventData.Type.ChangeFace, dice.diceIndex, maxValue, "Change Bam!"));
+            events.Add(new ScoreEventData(ScoreEventData.Type.ChangeFace, dice.diceIndex, localMaxValue, "Change Bam!"));
         }
-        
-        maxValue = 0;
 
         ChangeModi(myState, allDice, events);
-        
-        
     }
-
-
 
 }

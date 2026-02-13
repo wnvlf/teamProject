@@ -8,7 +8,7 @@ public class SellerDiceAbility : DiceData
     {
         if (myState == null) return;
         totalScore += GameManager.instance.gold;
-        events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, myState.diceIndex, 0, $"Seller +{GameManager.instance.gold}"));
+        events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, myState.diceIndex, totalScore, $"Seller +{GameManager.instance.gold}"));
     }
 
 }

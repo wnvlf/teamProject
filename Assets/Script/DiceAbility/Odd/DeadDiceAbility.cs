@@ -8,18 +8,18 @@ public class DeadDiceAbility : DiceData
 
     public override void AfterCalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        
+        int deadCount = 0;
+
         foreach (var dice in allDice)
         {
             if (dice != null && !dice.IsCurrentEven)
             {
-                bonusScore++;
+                deadCount++;
 
-                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, "Dead bonus"));
+                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, totalScore, "Dead bonus"));
             }
         }
-        totalScore *= (bonusScore * multiBonusScore + plusBonusScore);
-        events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, 0, "Dead"));
-        bonusScore = 0;
+        int finalMultiplier = deadCount * myState.multiBonusScore + myState.plusBonusScore;
+        events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, totalScore, $"Dead x {finalMultiplier}"));
     }
 }

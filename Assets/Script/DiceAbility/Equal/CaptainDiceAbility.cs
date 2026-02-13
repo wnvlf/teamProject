@@ -6,22 +6,21 @@ using UnityEngine;
 public class CaptainDiceAbility : DiceData
 {
 
-    int count = 0;
+    
     public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        
+        int count = 0;
+
         foreach (var dice in allDice)
         {
             if(dice.modifiedValue == myState.modifiedValue)
             {
                 count++;
-                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, $"Captain!"));
+                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, totalScore, $"Captain!"));
             }
         }
 
         totalScore *= count;
-        events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, 0, $"Captain! x{count}"));
-        count = 0;
+        events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, totalScore, $"Captain! x{count}"));
     }
-
 }

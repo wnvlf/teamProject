@@ -10,7 +10,7 @@ public class GoblinDiceAbility : DiceData
     {
         if(myState == null) return;
         GameManager.instance.gold += myState.modifiedValue;
-        events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, myState.diceIndex, 0, $"Gold +{myState.modifiedValue}"));
+        events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, myState.diceIndex, totalScore, $"Gold +{myState.modifiedValue}"));
     }
 
 }

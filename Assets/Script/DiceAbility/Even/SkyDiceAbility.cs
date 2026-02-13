@@ -6,14 +6,16 @@ public class SkyDiceAbility : DiceData
 {
     public int bonusScore = 2;
 
-    public override void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
+    public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
+        int currentBonusScore = bonusScore * myState.multiBonusScore + plusBonusScore;
         foreach (var dice in allDice)
         {
             if (dice != null && dice.IsCurrentEven)
             {
-                dice.scoreValue *= bonusScore;
-                events.Add(new ScoreEventData(ScoreEventData.Type.Multiplier, dice.diceIndex, 0, "Sky"));
+                int add = dice.scoreValue * (currentBonusScore - 1);
+                totalScore += add;
+                events.Add(new ScoreEventData(ScoreEventData.Type.Multiplier, dice.diceIndex, totalScore, $"Sky x{currentBonusScore}"));
             }
         }
     }

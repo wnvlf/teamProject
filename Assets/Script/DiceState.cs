@@ -14,6 +14,10 @@ public class DiceState
     public int changeValue;     
     public bool change;
 
+    public bool isIgnored = false;
+    public int multiBonusScore;
+    public int plusBonusScore;
+
     public ScoreManager.DiceType currentType;
     public bool isForceOdd = false;
 
@@ -27,10 +31,21 @@ public class DiceState
         scoreValue = value;
         changeValue = 0;
         change = false;
+        isIgnored = false;
 
-        this.currentType = data != null ? data.type : ScoreManager.DiceType.None;
+        if(data != null)
+        {
+            this.currentType = data.type;
+            multiBonusScore = data.multiBonusScore;
+            plusBonusScore = data.plusBonusScore;
+
+        }
+        else
+        {
+            this.currentType = ScoreManager.DiceType.None;
+            this.multiBonusScore = 1;
+            this.plusBonusScore = 0;
+        }
         this.isForceOdd = false;
     }
-
-    
 }

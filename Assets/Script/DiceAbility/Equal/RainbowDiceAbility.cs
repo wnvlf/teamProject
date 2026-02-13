@@ -5,24 +5,25 @@ using UnityEngine;
 public class RainbowDiceAbility : DiceData
 {
     public int bonusScore = 3;
-    bool allSame = true;
+    
 
     public override void AfterCalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        allSame = true;
-        for (int i = 0; i < allDice.Count; i++)
+        bool isAllSame = true;
+        int firstVal = allDice[0].modifiedValue;
+        foreach(var dice in allDice)
         {
-            if(allDice[i].modifiedValue != allDice[0].modifiedValue)
+            if(dice.modifiedValue != firstVal)
             {
-                allSame = false;
+                isAllSame = false;
                 break;
             }
         }
-        if (allSame)
+        if (isAllSame)
         {
             int score = totalScore * bonusScore;
             totalScore = score;
-            events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, 0, "Rainbow"));
+            events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, totalScore, "Rainbow"));
         }
     }
 

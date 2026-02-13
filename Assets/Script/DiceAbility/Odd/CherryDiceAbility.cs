@@ -6,9 +6,9 @@ public class CherryDiceAbility : DiceData
 {
     public int bonusScore = 5;
 
-    public override void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
+    public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        bonusScore = bonusScore * multiBonusScore + plusBonusScore;
+        int currentBonusScore = bonusScore * myState.multiBonusScore + myState.plusBonusScore;
 
         if (!myState.IsCurrentEven)
         {
@@ -16,12 +16,10 @@ public class CherryDiceAbility : DiceData
             {
                 if (dice != null && !dice.IsCurrentEven)
                 {
-                    dice.scoreValue += bonusScore;
-                    events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, "Cherry!"));
+                    totalScore += currentBonusScore;
+                    events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, totalScore, "Cherry!"));
                 }
             }
         }
-
-        bonusScore = 5;
     }
 }

@@ -5,21 +5,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "DiceAbility/curb")]
 public class CurbDiceAbility : DiceData
 {
-    int[] bonus = new int[7];
-    public override void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> events)
+    
+    public override void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        Array.Clear(bonus, 0, 7);
+        int[] localBonus = new int[7];
         
         foreach (var dice in allDice)
-        {          
-            bonus[dice.modifiedValue]++;            
+        {
+            localBonus[dice.modifiedValue]++;            
         }
 
         foreach(var dice in allDice)
         {
-            int score = bonus[dice.modifiedValue] * dice.modifiedValue;
+            int score = localBonus[dice.modifiedValue] * dice.modifiedValue;
             dice.scoreValue += score;
-            events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, $"curb +{score}"));
+            events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, totalScore, $"curb +{score}"));
         }
     }
 

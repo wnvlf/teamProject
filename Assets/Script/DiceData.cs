@@ -15,9 +15,7 @@ public class DiceData : ScriptableObject
     public int weight;
     public int gold;
     
-    
-    
-    public bool Reroll { get => reroll; set => reroll = value; }
+    // public bool Reroll { get => reroll; set => reroll = value; }
     
     [TextArea]
     public string Desc;
@@ -38,9 +36,7 @@ public class DiceData : ScriptableObject
 
     public virtual void OnRuleEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> scoreEvent) { }
 
-    public virtual void OnRollEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> scoreEvnet) { }
-
-    public virtual void BeforeCalculateEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> scoreEvent) { }
+    public virtual void OnRollEffect(DiceState myState, List<DiceState> allDice, List<ScoreEventData> scoreEvent) { }
 
     public virtual void CalculateEffect(DiceState myState, List<DiceState> allDice, ref int score, List<ScoreEventData> scoreEvent) { }
 

@@ -5,13 +5,12 @@ using System.Collections.Generic;
 public class BoosterDiceAbility : DiceData
 {
     public int bonusScore = 3;
-    int count = 0;
-
+    
     public override void AfterCalculateEffect(DiceState myState, List<DiceState> allDice, ref int totalScore, List<ScoreEventData> events)
     {
-        bonusScore = bonusScore * multiBonusScore + plusBonusScore;
+        int currentBonusScore = bonusScore * myState.multiBonusScore + myState.plusBonusScore;
 
-        count = 0;
+        int count = 0;
         foreach (var dice in allDice)
         {
             if (dice != null && !dice.IsCurrentEven)
@@ -22,20 +21,16 @@ public class BoosterDiceAbility : DiceData
 
         if (count >= 3)
         {
-            foreach (var dice in allDice)
+            totalScore += (currentBonusScore * allDice.Count);
+            events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, 0, $"Booster All +{currentBonusScore}"));
+
+            if (!GameManager.instance.hasUsedPlusReroll) 
             {
-                dice.scoreValue += bonusScore;             
-                events.Add(new ScoreEventData(ScoreEventData.Type.AddScore, dice.diceIndex, 0, $"booster! +{bonusScore}"));
-            }
-            if (Reroll)
-            {
+                GameManager.instance.hasUsedPlusReroll = true;
                 GameManager.instance.CurrentRerollCount++;
                 UiController.instance.UpdateRerollInfo(GameManager.instance.CurrentRerollCount, false);
-                Reroll = false;
+                events.Add(new ScoreEventData(ScoreEventData.Type.GlobalBuffs, -1, 0, "Booster +1 Reroll"));
             }
         }
-
-        totalScore += (bonusScore * allDice.Count);
-        bonusScore = 3;
     }
 }
