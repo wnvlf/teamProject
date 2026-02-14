@@ -17,17 +17,23 @@ public class GameManager : MonoBehaviour
     public int heart = 3;
     public int gold = 50;
 
+    public DiceManager diceManager;
     public int maxRerollCount = 1;
-    private int _currentRerollCount;
-    private bool _isFirstRoll = true;
-
     public int currentScore = 0;
     public int bestScore = 0;
-
-    public DiceManager diceManager;
+    public bool hasUsedPlusReroll = false;
 
     private List<DiceData> _lastDiceDatas;
     private List<int> _lastValues;
+    private bool _isFirstRoll = true;
+    private int _currentRerollCount;
+
+    public int CurrentRerollCount
+    {
+        get => _currentRerollCount;
+        set => _currentRerollCount = value;
+    }
+
 
     private void Awake()
     {
@@ -65,6 +71,7 @@ public class GameManager : MonoBehaviour
         _isFirstRoll = true;
         _currentRerollCount = maxRerollCount;
         currentScore = 0;
+        hasUsedPlusReroll = false;
 
         UiController.instance.HideAllPanels();
         UpdateGameUi();
@@ -85,6 +92,13 @@ public class GameManager : MonoBehaviour
         if (UiController.instance.rollBtn.interactable == false) return;
 
         UiController.instance.rollBtn.interactable = false;
+        //ScoreManager.instance.effects.Clear();
+
+        for (int i = 0; i < diceManager.panelDiceScript.Length; i++)
+        {
+            diceManager.panelDiceScript[i].MyState.diceData.multiBonusScore = 1;
+            diceManager.panelDiceScript[i].MyState.diceData.plusBonusScore = 0;
+        }
 
         if (_isFirstRoll)
         {

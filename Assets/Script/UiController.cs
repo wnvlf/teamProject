@@ -50,7 +50,7 @@ public class UiController : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.instance.PlayBgm(AudioManager.Bgm.Battle, true);
+        //AudioManager.instance.PlayBgm(AudioManager.Bgm.Battle, true);
     }
 
     public void UpdateInGameInfo(int round, int lives, int currentScore, int targetScore)
