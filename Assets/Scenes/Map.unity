@@ -687,63 +687,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &342433127
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 961.69434
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 754.219
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147445111222240792, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5137084178821267206, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
-      propertyPath: m_Name
-      value: ProjectLifeTimeScope
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e55491bf99a40ac488fe404b01a3cfcb, type: 3}
 --- !u!1 &446933401
 GameObject:
   m_ObjectHideFlags: 0
@@ -4215,6 +4158,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7371672894388552325}
     - target: {fileID: 206426067302634776, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
+      propertyPath: typeData
+      value: 
+      objectReference: {fileID: 11400000, guid: 912545263f9842445acd0934d71efe87, type: 2}
+    - target: {fileID: 206426067302634776, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: initialState
       value: 1
       objectReference: {fileID: 0}
@@ -4242,6 +4189,10 @@ PrefabInstance:
       propertyPath: initialState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1401316230580756438, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
+      propertyPath: typeData
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f68a4230b2239d4796dc8157deafaa2, type: 2}
     - target: {fileID: 1401316230580756438, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: initialState
       value: 1
@@ -4364,7 +4315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4640919964582269426, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4659472056440797499, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: typeData
@@ -4521,7 +4472,7 @@ PrefabInstance:
     - target: {fileID: 6789086096856906717, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: typeData
       value: 
-      objectReference: {fileID: 11400000, guid: 912545263f9842445acd0934d71efe87, type: 2}
+      objectReference: {fileID: 11400000, guid: 5f68a4230b2239d4796dc8157deafaa2, type: 2}
     - target: {fileID: 6789086096856906717, guid: 805a7a1362e61ba4ea2c23b7f612b1d7, type: 3}
       propertyPath: initialState
       value: 1
@@ -4706,5 +4657,4 @@ SceneRoots:
   - {fileID: 1998577994}
   - {fileID: 2028244276}
   - {fileID: 1648301411}
-  - {fileID: 342433127}
   - {fileID: 1259215482}

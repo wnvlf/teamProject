@@ -216,19 +216,28 @@ public class MapManager : MonoBehaviour
                 if (!isFinalStep)
                     nodeViews[nodeId].SetState(NodeState.Visited);
             },
-            onComplete: () =>
-            {
-                currentNodeId = path[path.Count - 1];
-                ArriveAtNode(currentNodeId);
-                isMoving = false;
-            });
+            onComplete: () => OnPathCompleted(path[path.Count - 1]).Forget());
     }
 
-    private void ArriveAtNode(int nodeId)
+    private async UniTaskVoid OnPathCompleted(int nodeId)
+    {
+        currentNodeId = nodeId;
+        await ArriveAtNodeAsync(nodeId);
+        isMoving = false;
+    }
+
+    private async UniTask ArriveAtNodeAsync(int nodeId)
     {
         var view = nodeViews[nodeId];
 
         if (view.State == NodeState.Visited) return;
+
+        if (view.Type == MNodeType.Event)
+        {
+            await stageFlow.ShowEventAsync();
+            CompleteCurrentNode(nodeId);
+            return;
+        }
 
         CompleteCurrentNode(nodeId);
 

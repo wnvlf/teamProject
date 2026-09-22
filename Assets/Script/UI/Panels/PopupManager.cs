@@ -26,8 +26,6 @@ public class PopupManager : MonoBehaviour
     [Header("플레이어 정보")]
     public TextMeshProUGUI playerGold;
 
-    [SerializeField] private GameObject hoverHintText;
-
     private ResourceManager _resourceManager;
     private PlayerShopManager _playerShopManager;
 
@@ -54,27 +52,26 @@ public class PopupManager : MonoBehaviour
     private void Start()
     {
         ClosePopup();
-        if (hoverHintText != null) hoverHintText.SetActive(true);
-        if (playerGold != null)
-        {
-            int gold = _playerShopManager != null && _playerShopManager.IsOpen ? 
-                _playerShopManager.TempGold : _resourceManager.gold;
-            playerGold.text = gold.ToString();
-        }
+        //if (playerGold != null)
+        //{
+        //    int gold = _playerShopManager != null && _playerShopManager.IsOpen ? 
+        //        _playerShopManager.TempGold : _resourceManager.gold;
+        //    playerGold.text = gold.ToString();
+        //}
 
-        if (_playerShopManager != null)
-            _playerShopManager.OnGoldChanged += UpdateGold;         
+        //if (_playerShopManager != null)
+        //    _playerShopManager.OnGoldChanged += UpdateGold;         
     }
 
-    private void OnDestroy()
-    {
-        if (_playerShopManager != null)
-            _playerShopManager.OnGoldChanged -= UpdateGold;
-    }
+    //private void OnDestroy()
+    //{
+    //    if (_playerShopManager != null)
+    //        _playerShopManager.OnGoldChanged -= UpdateGold;
+    //}
 
     public void SetStatus()
     {
-        playerGold.text = _resourceManager.gold.ToString();
+        //playerGold.text = _resourceManager.gold.ToString();
     }
 
     public void DescOpenPopup(DiceData data)
@@ -91,7 +88,6 @@ public class PopupManager : MonoBehaviour
 
     public void OpenPopup(DiceData data, RectTransform targetRect)
     {
-        if (hoverHintText != null) hoverHintText.SetActive(false);
         if (diceDesc == null) return;
         this.diceDesc.text = data.Desc;
         if (diceIcon != null) diceIcon.sprite = data.skin.GetSprite(1);
@@ -104,7 +100,6 @@ public class PopupManager : MonoBehaviour
 
     public void OpenPopup(BattleItemSo data, RectTransform targetRect)
     {
-        if (hoverHintText != null) hoverHintText.SetActive(false);
         if (itemDesc == null) return;
         this.itemDesc.text = data.itemDesc;
         if (itemIcon != null) itemIcon.sprite = data.itemIcon;
@@ -120,8 +115,7 @@ public class PopupManager : MonoBehaviour
         if(diceDesc != null) dicePopup.gameObject.SetActive(false);
         if(itemDesc != null) itemPopup.gameObject.SetActive(false);
         if (DescPopup != null) DescPopup.gameObject.SetActive(false);
-        if(hoverHintText != null) hoverHintText.SetActive(true);
     }
 
-    private void UpdateGold(int gold) => playerGold.text = $"{gold}";
+   // private void UpdateGold(int gold) => playerGold.text = $"{gold}";
 }

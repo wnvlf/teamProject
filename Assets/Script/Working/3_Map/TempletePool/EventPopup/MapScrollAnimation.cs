@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
-using Unity.Multiplayer.Center.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +33,15 @@ public class MapScrollAnimation : MonoBehaviour
     [SerializeField] private Button[] Buttons;
     private bool PlayAnim = false;
     private bool FirstAnim = true;
+
+    private UniTaskCompletionSource eventFinished;
+
+    public async UniTask ShowEventAsync(EventPopupSo eventSo = null)
+    {
+        eventFinished = new UniTaskCompletionSource();
+        await ScrollOpenAnimation(eventSo);
+        await eventFinished.Task;
+    }
 
     private async UniTask ScrollOpenAnimation(EventPopupSo eventPopup = null)
     {
@@ -146,6 +154,7 @@ public class MapScrollAnimation : MonoBehaviour
             FirstAnim = false;
             PlayAnim = false;
             await ScrollCloseAnimation();
+            eventFinished?.TrySetResult();
         }
         else
         {

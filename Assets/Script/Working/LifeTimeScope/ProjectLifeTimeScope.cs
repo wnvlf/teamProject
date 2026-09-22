@@ -12,6 +12,7 @@ public class ProjectLifetimeScope : LifetimeScope
     [SerializeField] private PlayerDeck playerDeckPrefab;
     [SerializeField] private ResourceManager resourceManagerPrefab;
     [SerializeField] private BattleDataManager battleDataManagerPrefab;
+    [SerializeField] private PlayerHudManager playerHudManagerPrefab;
 
     [Header("덱 관리 시스템 (신규 카드)")]
     [SerializeField] private PlayerCardCollection playerCardCollectionPrefab;
@@ -24,6 +25,10 @@ public class ProjectLifetimeScope : LifetimeScope
         builder.RegisterComponentInNewPrefab(sceneControllerPrefab, Lifetime.Singleton).DontDestroyOnLoad();
         builder.RegisterComponentInNewPrefab(itemManagerPrefab, Lifetime.Singleton).DontDestroyOnLoad();
         builder.RegisterComponentInNewPrefab(battleDataManagerPrefab, Lifetime.Singleton).DontDestroyOnLoad();
+        builder.RegisterComponentInNewPrefab(playerHudManagerPrefab, Lifetime.Singleton)
+            .DontDestroyOnLoad()
+            .AsImplementedInterfaces()
+            .AsSelf();
 
         builder.Register<SaveManager>(Lifetime.Singleton);
         builder.Register<MapSaveLoad>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

@@ -16,6 +16,10 @@ public class PlayerShopManager : MonoBehaviour
     [SerializeField] private int baseRerollCost = 1;
     public int BaseRerollCost => baseRerollCost;
     [SerializeField] private string ShopBGMKey;
+    [SerializeField] private string PurchaseSFXKey;
+
+    [Header("임시 테스트용 (인벤토리 시스템 확정 전까지)")]
+    [SerializeField] private PlayerDeckData testDiceDatabase;
 
     [Header("UI References")]
     [SerializeField] private GameObject shopCanvas;
@@ -30,15 +34,13 @@ public class PlayerShopManager : MonoBehaviour
 
     private AudioManager _audioManager;
     private ResourceManager _resourceManager;
-    private PlayerDeck _playerDeck;
     private ItemManager _itemManager;
 
     [Inject]
-    public void Construct(AudioManager audioManager, ResourceManager resourceManager, PlayerDeck playerDeck, ItemManager itemManager)
+    public void Construct(AudioManager audioManager, ResourceManager resourceManager, ItemManager itemManager)
     {
         _audioManager = audioManager;
         _resourceManager = resourceManager;
-        _playerDeck = playerDeck;
         _itemManager = itemManager;
     }
 
@@ -49,20 +51,19 @@ public class PlayerShopManager : MonoBehaviour
     }
 
     public void Open()
-    {        
+    {
         TempGold = _resourceManager.gold;
         RerollCount = 0;
 
-        TempDices = new List<DiceData>(_playerDeck.inventory);
+        TempDices = new List<DiceData>();
         TempItems = new List<BattleItemSo>(_itemManager.items);
 
         IsOpen = true;
         OnGoldChanged?.Invoke(TempGold);
-
     }
 
     public async void OpenWithAnimation()
-    {       
+    {
         Open();
         shopCanvas.SetActive(true);
         if (shopAnimator != null && shopAnimator.gameObject != null)
@@ -83,10 +84,8 @@ public class PlayerShopManager : MonoBehaviour
             return;
         }
         _resourceManager.gold = TempGold;
-        _playerDeck.inventory = new List<DiceData>(TempDices);
         _itemManager.items = new List<BattleItemSo>(TempItems);
         _resourceManager.Save();
-        _playerDeck.Save();
         _itemManager.Save();
         IsOpen = false;
     }
@@ -104,14 +103,13 @@ public class PlayerShopManager : MonoBehaviour
         Debug.Log("상점 변경사항 폐기");
     }
 
-
-    //--- 구매 / 판매 / 리롤 ---
+    //--- 구매 / 리롤 ---
 
     public bool TryPurchaseDice(DiceData dice)
     {
         int cost = dice.gold;
         if (!HasEnoughGold(cost)) return false;
-
+        _audioManager.PlaySfx(PurchaseSFXKey);
         SpendGold(cost);
         TempDices.Add(dice);
         return true;
@@ -121,22 +119,10 @@ public class PlayerShopManager : MonoBehaviour
     {
         int cost = item.gold;
         if (!HasEnoughGold(cost)) return false;
-
+        _audioManager.PlaySfx(PurchaseSFXKey);
         SpendGold(cost);
         TempItems.Add(item);
         return true;
-    }
-
-    public void SellDice(DiceData dice, int slotIndex, int sellPrice)
-    {
-        TempDices[slotIndex] = defaultDice;
-        GainGold(sellPrice);
-    }
-
-    public void SellItem(BattleItemSo item, int slotIndex, int sellPrice)
-    {
-        TempItems[slotIndex] = null;
-        GainGold(sellPrice);
     }
 
     public bool TryReroll()
@@ -148,8 +134,6 @@ public class PlayerShopManager : MonoBehaviour
         return true;
     }
 
-    public void SetDiceAtSlot(int slotIndex, DiceData data) => TempDices[slotIndex] = data;
-
     //---------- Private -------------
 
     private bool HasEnoughGold(int amount) => TempGold >= amount;
@@ -157,12 +141,6 @@ public class PlayerShopManager : MonoBehaviour
     private void SpendGold(int amount)
     {
         TempGold -= amount;
-        OnGoldChanged?.Invoke(TempGold);
-    }
-
-    private void GainGold(int amount)
-    {
-        TempGold += amount;
         OnGoldChanged?.Invoke(TempGold);
     }
 }

@@ -7,7 +7,6 @@ public class ShopSceneLifetimeScope : LifetimeScope
     {
         builder.RegisterComponentInHierarchy<PlayerShopManager>();
         builder.RegisterComponentInHierarchy<ShopUIManager>();
-        builder.RegisterComponentInHierarchy<ShopPanelAnimator>();
         builder.RegisterComponentInHierarchy<PopupManager>();
     }
 }

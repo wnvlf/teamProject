@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: StageMapPool
   m_EditorClassIdentifier: Assembly-CSharp::StageMapPool
   templates:
-  - {fileID: 11400000, guid: 316215e34f6f30b4e80698cb797348fb, type: 2}
-  - {fileID: 11400000, guid: 7f7d0130bc79d7f40a26f62b813b4b90, type: 2}
-  - {fileID: 11400000, guid: 642b6241d7a9f5e4fbe12793ae6df68b, type: 2}
+  - {fileID: 11400000, guid: ec3de465af2831d499c28159c1694872, type: 2}

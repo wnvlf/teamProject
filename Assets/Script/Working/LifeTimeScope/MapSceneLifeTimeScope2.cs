@@ -8,6 +8,7 @@ public class MapSceneLifetimeScope : LifetimeScope
         builder.RegisterComponentInHierarchy<MapPathDrawer>();
         builder.RegisterComponentInHierarchy<MapCharacterMover>();
         builder.RegisterComponentInHierarchy<MapManager>();
+        builder.RegisterComponentInHierarchy<MapScrollAnimation>();
 
         builder.Register<MapPathfinder>(Lifetime.Singleton);
         builder.Register<MapIntroController>(Lifetime.Singleton);

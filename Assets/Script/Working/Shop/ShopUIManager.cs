@@ -23,17 +23,20 @@ public class ShopUIManager : MonoBehaviour
     private SceneController _sceneController;
     private PlayerShopManager _playerShopManager;
     private PopupManager _popupManager;
+    private PlayerHudManager _playerHudManager;
 
     [Inject]
-    public void Construct(SceneController sceneController, PlayerShopManager playerShopManager, PopupManager popupManager)
+    public void Construct(SceneController sceneController, PlayerShopManager playerShopManager, PopupManager popupManager, PlayerHudManager playerHudManager)
     {
         _sceneController = sceneController;
         _playerShopManager = playerShopManager;
         _popupManager = popupManager;
+        _playerHudManager = playerHudManager;
     }
 
     private void Start()
     {
+        
         exitButton.onClick.AddListener(() =>
         {
             OnExitClicked().Forget();
@@ -42,6 +45,8 @@ public class ShopUIManager : MonoBehaviour
 
     public void Initialize()
     {
+        
+        inventoryIconRect = _playerHudManager.Inventory.GetComponent<RectTransform>();
         // 인벤토리 아이콘 참조 연결
         foreach (var item in diceItems)
         {

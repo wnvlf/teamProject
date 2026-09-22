@@ -18,8 +18,13 @@ public class SceneController : MonoBehaviour
     public const string ShopScene = "Shop";
     public const string BossScene = "Boss";
     public const string EventScene = "Event";
+    public const string InventoryScene = "DeckEdit";
 
     public bool isFirstEntry = true;
+    public bool ShowHud =>
+        SceneManager.GetActiveScene().name != SceneTitle &&
+        SceneManager.GetActiveScene().name != SceneBattle &&
+        SceneManager.GetActiveScene().name != BossScene;
 
     [Header("로딩 패널(타이틀 -> 맵)")]
     [SerializeField] private GameObject loadingPanel;
@@ -37,6 +42,7 @@ public class SceneController : MonoBehaviour
 
     private SceneInstance? currentAddressableScene;
     public bool IsTransitioning { get; private set; }
+    public bool IsInventoryOpen { get; private set; }
 
     private void Awake()
     {
@@ -65,6 +71,30 @@ public class SceneController : MonoBehaviour
     public void LoadShopScene() => LoadAsync(ShopScene, false).Forget();
     public void LoadBossScene() => LoadAsync(BossScene, false).Forget();
     public void LoadEventScene() => LoadAsync(EventScene, false).Forget();
+
+    public void ToggleInventory()
+    {
+        if (IsInventoryOpen)
+            CloseInventoryAsync().Forget();
+        else
+            OpenInventoryAsync().Forget();
+    }
+
+    private async UniTask OpenInventoryAsync()
+    {
+        if (IsInventoryOpen) return;
+
+        await SceneManager.LoadSceneAsync(InventoryScene, LoadSceneMode.Additive);
+        IsInventoryOpen = true;
+    }
+
+    private async UniTask CloseInventoryAsync()
+    {
+        if (!IsInventoryOpen) return;
+
+        await SceneManager.UnloadSceneAsync(InventoryScene);
+        IsInventoryOpen = false;
+    }
 
     private async UniTask LoadMapFromTitleAsync()
     {
